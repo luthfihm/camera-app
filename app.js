@@ -5,7 +5,12 @@ var constraints = { video: { facingMode: { exact: "environment" } }, audio: fals
 const cameraView = document.querySelector("#camera--view"),
     cameraOutput = document.querySelector("#camera--output"),
     cameraSensor = document.querySelector("#camera--sensor"),
-    cameraTrigger = document.querySelector("#camera--trigger")
+    cameraTrigger = document.querySelector("#camera--trigger"),
+    flashTrigger = document.querySelector("#flash--trigger")
+
+
+let track = null;
+let flashEnabled = false;
 
 // Access the device camera and stream to cameraView
 function cameraStart() {
@@ -31,6 +36,16 @@ cameraTrigger.onclick = function() {
 
 cameraOutput.onclick = function() {
   window.open(cameraOutput.src, '_blank');
+};
+
+flashTrigger.onclick = function() {
+  if (track !== null) {
+    flashEnabled = !flashEnabled;
+    track.applyConstraints({
+      advanced: [{torch: flashEnabled}]
+    });
+    flashTrigger.innerHTML = flashEnabled ? 'On' : 'Off';
+  }
 };
 
 // Start the video stream when the window loads
